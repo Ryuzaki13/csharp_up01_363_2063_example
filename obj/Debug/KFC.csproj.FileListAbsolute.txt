@@ -19,3 +19,10 @@ C:\Users\alexey\source\repos\KFC\obj\Debug\KFC.exe
 C:\Users\alexey\source\repos\KFC\obj\Debug\KFC.pdb
 C:\Users\alexey\source\repos\KFC\obj\Debug\AppPage\Cashier.g.cs
 C:\Users\alexey\source\repos\KFC\obj\Debug\AppPage\Cashier.baml
+C:\Users\alexey\source\repos\KFC\bin\Debug\EntityFramework.dll
+C:\Users\alexey\source\repos\KFC\bin\Debug\EntityFramework.SqlServer.dll
+C:\Users\alexey\source\repos\KFC\bin\Debug\EntityFramework.xml
+C:\Users\alexey\source\repos\KFC\bin\Debug\EntityFramework.SqlServer.xml
+C:\Users\alexey\source\repos\KFC\bin\Debug\ru\EntityFramework.resources.dll
+C:\Users\alexey\source\repos\KFC\obj\Debug\KFC_Content.g.cs
+C:\Users\alexey\source\repos\KFC\obj\Debug\KFC.csproj.CopyComplete

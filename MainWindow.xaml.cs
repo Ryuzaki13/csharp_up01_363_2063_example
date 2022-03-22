@@ -21,7 +21,18 @@ namespace KFC
     public partial class MainWindow : Window
     {
         public static MainWindow Instance { get; private set; }
+
+        // DATABASE CONNECTION
+
+        public static Database.Connection Connection { get; private set; }
+
+        // PAGE VARIABLES
+
         public static AppPage.Authorization AppAuthorization { get; private set; }
+        public static AppPage.Administrator AppAdministrator { get; private set; }
+        public static AppPage.Client AppClient { get; private set; }
+        public static AppPage.Cook AppCook { get; private set; }
+        public static AppPage.Waiter AppWaiter { get; private set; }
         public static AppPage.Cashier AppCashier { get; private set; }
 
         public MainWindow()
@@ -29,8 +40,13 @@ namespace KFC
             InitializeComponent();
 
             Instance = this;
+            Connection = new Database.Connection();
 
             AppAuthorization = new AppPage.Authorization();
+            AppAdministrator = new AppPage.Administrator();
+            AppClient = new AppPage.Client();
+            AppCook = new AppPage.Cook();
+            AppWaiter = new AppPage.Waiter();
             AppCashier = new AppPage.Cashier();
 
             AppFrame.Navigate(AppAuthorization);

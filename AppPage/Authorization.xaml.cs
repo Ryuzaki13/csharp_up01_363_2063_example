@@ -81,14 +81,48 @@ namespace KFC.AppPage
                     textBox.Text = "";
                     textBox.Foreground = textColor;
                 }
-                
+
             }
-            
+
         }
 
         private void onLogin(object sender, RoutedEventArgs e)
         {
-            NavigationService.Navigate(MainWindow.AppCashier);
+            string phone = textBoxPhone.Text, pass = textBoxPassword.Text;
+
+            if (phone == defaultPlaceholder[textBoxPhone.Uid])
+            {
+                phone = "";
+            }
+            if (pass == defaultPlaceholder[textBoxPassword.Uid])
+            {
+                pass = "";
+            }
+
+            if (string.IsNullOrEmpty(phone) || string.IsNullOrEmpty(pass))
+            {
+                MessageBox.Show("Введите учетные данные", "Внимание!");
+                return;
+            }
+
+            Database.User user = MainWindow.Connection.User.Where(u => u.Phone == phone && u.Password == pass).FirstOrDefault();
+            if (user != null)
+            {
+                switch (user.Role)
+                {
+                    case "Администратор": NavigationService.Navigate(MainWindow.AppAdministrator); break;
+                    case "Кассир": NavigationService.Navigate(MainWindow.AppCashier); break;
+                    case "Повар": NavigationService.Navigate(MainWindow.AppCook); break;
+                    case "Официант": NavigationService.Navigate(MainWindow.AppWaiter); break;
+                    case "Клиент": NavigationService.Navigate(MainWindow.AppClient); break;
+                    default: MessageBox.Show("Неверная учетная запись. Обратитесь к администратору.", "Внимание!"); break;
+                }
+            }
+            else
+            {
+                MessageBox.Show("Неверный логин/пароль", "Внимание!");
+            }
+
         }
     }
 }
