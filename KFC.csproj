@@ -88,7 +88,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="MainWindow.xaml">
+    <Page Include="AppWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -114,6 +114,21 @@
     <Compile Include="AppPage\Cashier.xaml.cs">
       <DependentUpon>Cashier.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Database\Category.cs">
+      <DependentUpon>KFCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Database\Compound.cs">
+      <DependentUpon>KFCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Database\Dish.cs">
+      <DependentUpon>KFCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Database\DishStatus.cs">
+      <DependentUpon>KFCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Database\Ingredient.cs">
+      <DependentUpon>KFCModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Database\KFCModel.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -129,18 +144,28 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>KFCModel.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Database\Order.cs">
+      <DependentUpon>KFCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Database\OrderCompound.cs">
+      <DependentUpon>KFCModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Database\Role.cs">
+      <DependentUpon>KFCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Database\Status.cs">
       <DependentUpon>KFCModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Database\User.cs">
       <DependentUpon>KFCModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
+    <Compile Include="AppWindow.xaml.cs">
+      <DependentUpon>AppWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Lib\Placeholder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

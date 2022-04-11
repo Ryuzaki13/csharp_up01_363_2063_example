@@ -105,16 +105,31 @@ namespace KFC.AppPage
                 return;
             }
 
-            Database.User user = MainWindow.Connection.User.Where(u => u.Phone == phone && u.Password == pass).FirstOrDefault();
+            Database.User user = AppWindow.Connection.User.Where(u => u.Phone == phone && u.Password == pass).FirstOrDefault();
             if (user != null)
             {
                 switch (user.Role)
                 {
-                    case "Администратор": NavigationService.Navigate(MainWindow.AppAdministrator); break;
-                    case "Кассир": NavigationService.Navigate(MainWindow.AppCashier); break;
-                    case "Повар": NavigationService.Navigate(MainWindow.AppCook); break;
-                    case "Официант": NavigationService.Navigate(MainWindow.AppWaiter); break;
-                    case "Клиент": NavigationService.Navigate(MainWindow.AppClient); break;
+                    case "Администратор":
+                        AppWindow.AppAdministrator.Setup(AppWindow.Instance);
+                        NavigationService.Navigate(AppWindow.AppAdministrator);
+                        break;
+                    case "Кассир":
+                        NavigationService.Navigate(AppWindow.AppCashier);
+                        AppWindow.Instance.Title = "KFC - кассир";
+                        break;
+                    case "Повар": 
+                        NavigationService.Navigate(AppWindow.AppCook);
+                        AppWindow.Instance.Title = "KFC - повар";
+                        break;
+                    case "Официант": 
+                        NavigationService.Navigate(AppWindow.AppWaiter);
+                        AppWindow.Instance.Title = "KFC - официант";
+                        break;
+                    case "Клиент":
+                        NavigationService.Navigate(AppWindow.AppClient);
+                        AppWindow.Instance.Title = "KFC - клиент";
+                        break;
                     default: MessageBox.Show("Неверная учетная запись. Обратитесь к администратору.", "Внимание!"); break;
                 }
             }

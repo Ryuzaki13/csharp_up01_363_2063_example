@@ -4,8 +4,70 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="Хранилище userXModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="Хранилище userXModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Category">
+          <Key>
+            <PropertyRef Name="Name" />
+          </Key>
+          <Property Name="Name" Type="varchar" MaxLength="30" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Compound">
+          <Key>
+            <PropertyRef Name="DishID" />
+            <PropertyRef Name="IngredientID" />
+          </Key>
+          <Property Name="DishID" Type="bigint" Nullable="false" />
+          <Property Name="IngredientID" Type="bigint" Nullable="false" />
+          <Property Name="Volume" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Dish">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="Price" Type="money" Nullable="false" />
+          <Property Name="Category" Type="varchar" MaxLength="30" Nullable="false" />
+        </EntityType>
+        <EntityType Name="DishStatus">
+          <Key>
+            <PropertyRef Name="Name" />
+          </Key>
+          <Property Name="Name" Type="varchar" MaxLength="20" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Ingredient">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="Calory" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Order">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Date" Type="datetime" Nullable="false" />
+          <Property Name="Status" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="Client" Type="nchar" MaxLength="10" Nullable="false" />
+        </EntityType>
+        <EntityType Name="OrderCompound">
+          <Key>
+            <PropertyRef Name="OrderID" />
+            <PropertyRef Name="DishID" />
+          </Key>
+          <Property Name="OrderID" Type="bigint" Nullable="false" />
+          <Property Name="DishID" Type="bigint" Nullable="false" />
+          <Property Name="Status" Type="varchar" MaxLength="20" Nullable="false" />
+        </EntityType>
         <EntityType Name="Role">
+          <Key>
+            <PropertyRef Name="Name" />
+          </Key>
+          <Property Name="Name" Type="varchar" MaxLength="20" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Status">
           <Key>
             <PropertyRef Name="Name" />
           </Key>
@@ -20,6 +82,102 @@
           <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="Role" Type="varchar" MaxLength="20" Nullable="false" />
         </EntityType>
+        <Association Name="FK_Compound_Dish">
+          <End Role="Dish" Type="Self.Dish" Multiplicity="1" />
+          <End Role="Compound" Type="Self.Compound" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Dish">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Compound">
+              <PropertyRef Name="DishID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Compound_Ingredient">
+          <End Role="Ingredient" Type="Self.Ingredient" Multiplicity="1" />
+          <End Role="Compound" Type="Self.Compound" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Ingredient">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Compound">
+              <PropertyRef Name="IngredientID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Dish_Category">
+          <End Role="Category" Type="Self.Category" Multiplicity="1" />
+          <End Role="Dish" Type="Self.Dish" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Category">
+              <PropertyRef Name="Name" />
+            </Principal>
+            <Dependent Role="Dish">
+              <PropertyRef Name="Category" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Order_Status">
+          <End Role="Status" Type="Self.Status" Multiplicity="1" />
+          <End Role="Order" Type="Self.Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Status">
+              <PropertyRef Name="Name" />
+            </Principal>
+            <Dependent Role="Order">
+              <PropertyRef Name="Status" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Order_User">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="Order" Type="Self.Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Phone" />
+            </Principal>
+            <Dependent Role="Order">
+              <PropertyRef Name="Client" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderCompound_Dish">
+          <End Role="Dish" Type="Self.Dish" Multiplicity="1" />
+          <End Role="OrderCompound" Type="Self.OrderCompound" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Dish">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="OrderCompound">
+              <PropertyRef Name="DishID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderCompound_DishStatus">
+          <End Role="DishStatus" Type="Self.DishStatus" Multiplicity="1" />
+          <End Role="OrderCompound" Type="Self.OrderCompound" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DishStatus">
+              <PropertyRef Name="Name" />
+            </Principal>
+            <Dependent Role="OrderCompound">
+              <PropertyRef Name="Status" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderCompound_Order">
+          <End Role="Order" Type="Self.Order" Multiplicity="1" />
+          <End Role="OrderCompound" Type="Self.OrderCompound" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Order">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="OrderCompound">
+              <PropertyRef Name="OrderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_User_Role">
           <End Role="Role" Type="Self.Role" Multiplicity="1" />
           <End Role="User" Type="Self.User" Multiplicity="*" />
@@ -33,15 +191,54 @@
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="Хранилище userXModelContainer">
+          <EntitySet Name="Category" EntityType="Self.Category" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Compound" EntityType="Self.Compound" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Dish" EntityType="Self.Dish" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DishStatus" EntityType="Self.DishStatus" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Ingredient" EntityType="Self.Ingredient" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Order" EntityType="Self.Order" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OrderCompound" EntityType="Self.OrderCompound" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Role" EntityType="Self.Role" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Status" EntityType="Self.Status" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Compound_Dish" Association="Self.FK_Compound_Dish">
+            <End Role="Dish" EntitySet="Dish" />
+            <End Role="Compound" EntitySet="Compound" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Compound_Ingredient" Association="Self.FK_Compound_Ingredient">
+            <End Role="Ingredient" EntitySet="Ingredient" />
+            <End Role="Compound" EntitySet="Compound" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Dish_Category" Association="Self.FK_Dish_Category">
+            <End Role="Category" EntitySet="Category" />
+            <End Role="Dish" EntitySet="Dish" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Order_Status" Association="Self.FK_Order_Status">
+            <End Role="Status" EntitySet="Status" />
+            <End Role="Order" EntitySet="Order" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Order_User" Association="Self.FK_Order_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="Order" EntitySet="Order" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderCompound_Dish" Association="Self.FK_OrderCompound_Dish">
+            <End Role="Dish" EntitySet="Dish" />
+            <End Role="OrderCompound" EntitySet="OrderCompound" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderCompound_DishStatus" Association="Self.FK_OrderCompound_DishStatus">
+            <End Role="DishStatus" EntitySet="DishStatus" />
+            <End Role="OrderCompound" EntitySet="OrderCompound" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderCompound_Order" Association="Self.FK_OrderCompound_Order">
+            <End Role="Order" EntitySet="Order" />
+            <End Role="OrderCompound" EntitySet="OrderCompound" />
+          </AssociationSet>
           <AssociationSet Name="FK_User_Role" Association="Self.FK_User_Role">
             <End Role="Role" EntitySet="Role" />
             <End Role="User" EntitySet="User" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="userXModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -61,6 +258,7 @@
           <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Role" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
           <NavigationProperty Name="Role1" Relationship="Self.FK_User_Role" FromRole="User" ToRole="Role" />
+          <NavigationProperty Name="Order" Relationship="userXModel.FK_Order_User" FromRole="User" ToRole="Order" />
         </EntityType>
         <Association Name="FK_User_Role">
           <End Role="Role" Type="Self.Role" Multiplicity="1" />
@@ -81,7 +279,220 @@
             <End Role="Role" EntitySet="Role" />
             <End Role="User" EntitySet="User" />
           </AssociationSet>
+          <EntitySet Name="Compound" EntityType="userXModel.Compound" />
+          <EntitySet Name="Dish" EntityType="userXModel.Dish" />
+          <EntitySet Name="DishStatus" EntityType="userXModel.DishStatus" />
+          <EntitySet Name="Ingredient" EntityType="userXModel.Ingredient" />
+          <EntitySet Name="Order" EntityType="userXModel.Order" />
+          <EntitySet Name="OrderCompound" EntityType="userXModel.OrderCompound" />
+          <EntitySet Name="Status" EntityType="userXModel.Status" />
+          <AssociationSet Name="FK_Compound_Dish" Association="userXModel.FK_Compound_Dish">
+            <End Role="Dish" EntitySet="Dish" />
+            <End Role="Compound" EntitySet="Compound" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Compound_Ingredient" Association="userXModel.FK_Compound_Ingredient">
+            <End Role="Ingredient" EntitySet="Ingredient" />
+            <End Role="Compound" EntitySet="Compound" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderCompound_Dish" Association="userXModel.FK_OrderCompound_Dish">
+            <End Role="Dish" EntitySet="Dish" />
+            <End Role="OrderCompound" EntitySet="OrderCompound" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderCompound_DishStatus" Association="userXModel.FK_OrderCompound_DishStatus">
+            <End Role="DishStatus" EntitySet="DishStatus" />
+            <End Role="OrderCompound" EntitySet="OrderCompound" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Order_Status" Association="userXModel.FK_Order_Status">
+            <End Role="Status" EntitySet="Status" />
+            <End Role="Order" EntitySet="Order" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderCompound_Order" Association="userXModel.FK_OrderCompound_Order">
+            <End Role="Order" EntitySet="Order" />
+            <End Role="OrderCompound" EntitySet="OrderCompound" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Order_User" Association="userXModel.FK_Order_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="Order" EntitySet="Order" />
+          </AssociationSet>
+          <EntitySet Name="Category" EntityType="userXModel.Category" />
+          <AssociationSet Name="FK_Dish_Category" Association="userXModel.FK_Dish_Category">
+            <End Role="Category" EntitySet="Category" />
+            <End Role="Dish" EntitySet="Dish" />
+          </AssociationSet>
         </EntityContainer>
+        <EntityType Name="Compound">
+          <Key>
+            <PropertyRef Name="DishID" />
+            <PropertyRef Name="IngredientID" />
+          </Key>
+          <Property Name="DishID" Type="Int64" Nullable="false" />
+          <Property Name="IngredientID" Type="Int64" Nullable="false" />
+          <Property Name="Volume" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Dish" Relationship="userXModel.FK_Compound_Dish" FromRole="Compound" ToRole="Dish" />
+          <NavigationProperty Name="Ingredient" Relationship="userXModel.FK_Compound_Ingredient" FromRole="Compound" ToRole="Ingredient" />
+        </EntityType>
+        <EntityType Name="Dish">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Price" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+          <NavigationProperty Name="Compound" Relationship="userXModel.FK_Compound_Dish" FromRole="Dish" ToRole="Compound" />
+          <NavigationProperty Name="OrderCompound" Relationship="userXModel.FK_OrderCompound_Dish" FromRole="Dish" ToRole="OrderCompound" />
+          <Property Name="Category" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Category1" Relationship="userXModel.FK_Dish_Category" FromRole="Dish" ToRole="Category" />
+        </EntityType>
+        <EntityType Name="DishStatus">
+          <Key>
+            <PropertyRef Name="Name" />
+          </Key>
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="OrderCompound" Relationship="userXModel.FK_OrderCompound_DishStatus" FromRole="DishStatus" ToRole="OrderCompound" />
+        </EntityType>
+        <EntityType Name="Ingredient">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Calory" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Compound" Relationship="userXModel.FK_Compound_Ingredient" FromRole="Ingredient" ToRole="Compound" />
+        </EntityType>
+        <EntityType Name="Order">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Date" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Status" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Status1" Relationship="userXModel.FK_Order_Status" FromRole="Order" ToRole="Status" />
+          <NavigationProperty Name="OrderCompound" Relationship="userXModel.FK_OrderCompound_Order" FromRole="Order" ToRole="OrderCompound" />
+          <Property Name="Client" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="true" />
+          <NavigationProperty Name="User" Relationship="userXModel.FK_Order_User" FromRole="Order" ToRole="User" />
+        </EntityType>
+        <EntityType Name="OrderCompound">
+          <Key>
+            <PropertyRef Name="OrderID" />
+            <PropertyRef Name="DishID" />
+          </Key>
+          <Property Name="OrderID" Type="Int64" Nullable="false" />
+          <Property Name="DishID" Type="Int64" Nullable="false" />
+          <Property Name="Status" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Dish" Relationship="userXModel.FK_OrderCompound_Dish" FromRole="OrderCompound" ToRole="Dish" />
+          <NavigationProperty Name="DishStatus" Relationship="userXModel.FK_OrderCompound_DishStatus" FromRole="OrderCompound" ToRole="DishStatus" />
+          <NavigationProperty Name="Order" Relationship="userXModel.FK_OrderCompound_Order" FromRole="OrderCompound" ToRole="Order" />
+        </EntityType>
+        <EntityType Name="Status">
+          <Key>
+            <PropertyRef Name="Name" />
+          </Key>
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Order" Relationship="userXModel.FK_Order_Status" FromRole="Status" ToRole="Order" />
+        </EntityType>
+        <Association Name="FK_Compound_Dish">
+          <End Type="userXModel.Dish" Role="Dish" Multiplicity="1" />
+          <End Type="userXModel.Compound" Role="Compound" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Dish">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Compound">
+              <PropertyRef Name="DishID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Compound_Ingredient">
+          <End Type="userXModel.Ingredient" Role="Ingredient" Multiplicity="1" />
+          <End Type="userXModel.Compound" Role="Compound" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Ingredient">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Compound">
+              <PropertyRef Name="IngredientID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderCompound_Dish">
+          <End Type="userXModel.Dish" Role="Dish" Multiplicity="1" />
+          <End Type="userXModel.OrderCompound" Role="OrderCompound" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Dish">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="OrderCompound">
+              <PropertyRef Name="DishID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderCompound_DishStatus">
+          <End Type="userXModel.DishStatus" Role="DishStatus" Multiplicity="1" />
+          <End Type="userXModel.OrderCompound" Role="OrderCompound" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DishStatus">
+              <PropertyRef Name="Name" />
+            </Principal>
+            <Dependent Role="OrderCompound">
+              <PropertyRef Name="Status" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Order_Status">
+          <End Type="userXModel.Status" Role="Status" Multiplicity="1" />
+          <End Type="userXModel.Order" Role="Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Status">
+              <PropertyRef Name="Name" />
+            </Principal>
+            <Dependent Role="Order">
+              <PropertyRef Name="Status" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderCompound_Order">
+          <End Type="userXModel.Order" Role="Order" Multiplicity="1" />
+          <End Type="userXModel.OrderCompound" Role="OrderCompound" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Order">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="OrderCompound">
+              <PropertyRef Name="OrderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Order_User">
+          <End Type="userXModel.User" Role="User" Multiplicity="1" />
+          <End Type="userXModel.Order" Role="Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Phone" />
+            </Principal>
+            <Dependent Role="Order">
+              <PropertyRef Name="Client" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Category">
+          <Key>
+            <PropertyRef Name="Name" />
+          </Key>
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Dish" Relationship="userXModel.FK_Dish_Category" FromRole="Category" ToRole="Dish" />
+        </EntityType>
+        <Association Name="FK_Dish_Category">
+          <End Type="userXModel.Category" Role="Category" Multiplicity="1" />
+          <End Type="userXModel.Dish" Role="Dish" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Category">
+              <PropertyRef Name="Name" />
+            </Principal>
+            <Dependent Role="Dish">
+              <PropertyRef Name="Category" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -102,6 +513,74 @@
                 <ScalarProperty Name="Password" ColumnName="Password" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Role" ColumnName="Role" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Compound">
+            <EntityTypeMapping TypeName="userXModel.Compound">
+              <MappingFragment StoreEntitySet="Compound">
+                <ScalarProperty Name="Volume" ColumnName="Volume" />
+                <ScalarProperty Name="IngredientID" ColumnName="IngredientID" />
+                <ScalarProperty Name="DishID" ColumnName="DishID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Dish">
+            <EntityTypeMapping TypeName="userXModel.Dish">
+              <MappingFragment StoreEntitySet="Dish">
+                <ScalarProperty Name="Category" ColumnName="Category" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DishStatus">
+            <EntityTypeMapping TypeName="userXModel.DishStatus">
+              <MappingFragment StoreEntitySet="DishStatus">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Ingredient">
+            <EntityTypeMapping TypeName="userXModel.Ingredient">
+              <MappingFragment StoreEntitySet="Ingredient">
+                <ScalarProperty Name="Calory" ColumnName="Calory" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Order">
+            <EntityTypeMapping TypeName="userXModel.Order">
+              <MappingFragment StoreEntitySet="Order">
+                <ScalarProperty Name="Client" ColumnName="Client" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OrderCompound">
+            <EntityTypeMapping TypeName="userXModel.OrderCompound">
+              <MappingFragment StoreEntitySet="OrderCompound">
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="DishID" ColumnName="DishID" />
+                <ScalarProperty Name="OrderID" ColumnName="OrderID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Status">
+            <EntityTypeMapping TypeName="userXModel.Status">
+              <MappingFragment StoreEntitySet="Status">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Category">
+            <EntityTypeMapping TypeName="userXModel.Category">
+              <MappingFragment StoreEntitySet="Category">
+                <ScalarProperty Name="Name" ColumnName="Name" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

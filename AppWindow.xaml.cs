@@ -18,9 +18,9 @@ namespace KFC
     /// <summary>
     /// Логика взаимодействия для MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class AppWindow : Window
     {
-        public static MainWindow Instance { get; private set; }
+        public static AppWindow Instance { get; private set; }
 
         // DATABASE CONNECTION
 
@@ -35,7 +35,7 @@ namespace KFC
         public static AppPage.Waiter AppWaiter { get; private set; }
         public static AppPage.Cashier AppCashier { get; private set; }
 
-        public MainWindow()
+        public AppWindow()
         {
             InitializeComponent();
 

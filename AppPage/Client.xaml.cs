@@ -24,5 +24,19 @@ namespace KFC.AppPage
         {
             InitializeComponent();
         }
+
+        public void Build()
+        {
+            var dishList = AppWindow.Connection.Dish.ToList();
+
+            DishList.Children.Clear();
+
+            foreach (var dish in dishList)
+            {
+                TextBlock tb = new TextBlock();
+                tb.Text = dish.Name;
+                DishList.Children.Add(tb);
+            }
+        }
     }
 }

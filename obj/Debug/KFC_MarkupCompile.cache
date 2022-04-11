@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-C:\Users\alexey\source\repos\KFC\obj\Debug\
+C:\Users\alexey.IT-KTK\source\repos\csharp_up01_363_2063_example\obj\Debug\
 KFC
 none
 false
 DEBUG;TRACE
-C:\Users\alexey\source\repos\KFC\App.xaml
-3-1013935937
-2-946217149
-12630055626
-18-1618715233
-AppPage\Authorization.xaml;AppPage\Cashier.xaml;MainWindow.xaml;
+C:\Users\alexey.IT-KTK\source\repos\csharp_up01_363_2063_example\App.xaml
+7-89787331
+2-449906150
+25-1566349348
+18-1597268756
+AppPage\Administrator.xaml;AppPage\Client.xaml;AppPage\Cook.xaml;AppPage\Waiter.xaml;AppPage\Authorization.xaml;AppPage\Cashier.xaml;AppWindow.xaml;
 
 False
 

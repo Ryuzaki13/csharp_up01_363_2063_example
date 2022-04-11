@@ -27,5 +27,13 @@ namespace KFC.Database
     
         public virtual DbSet<Role> Role { get; set; }
         public virtual DbSet<User> User { get; set; }
+        public virtual DbSet<Compound> Compound { get; set; }
+        public virtual DbSet<Dish> Dish { get; set; }
+        public virtual DbSet<DishStatus> DishStatus { get; set; }
+        public virtual DbSet<Ingredient> Ingredient { get; set; }
+        public virtual DbSet<Order> Order { get; set; }
+        public virtual DbSet<OrderCompound> OrderCompound { get; set; }
+        public virtual DbSet<Status> Status { get; set; }
+        public virtual DbSet<Category> Category { get; set; }
     }
 }

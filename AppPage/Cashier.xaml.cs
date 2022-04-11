@@ -28,7 +28,7 @@ namespace KFC.AppPage
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            MainWindow.Instance.Title = "KFC - кассир";
+            AppWindow.Instance.Title = "KFC - кассир";
         }
     }
 }
